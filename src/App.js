@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import uuidv4 from 'uuid/v4';
 
-import TaskView from './components/view/TaskView';
-import Nav from './components/container/Nav';
-import TaskInput from './components/container/TaskInput';
+import { Nav, Task, TaskInput } from './components/container';
 
 class App extends Component {
 
@@ -25,9 +23,25 @@ class App extends Component {
     }
     let currentItem = Object.assign([], this.state.todo);
     currentItem.push(newItem);
-
     this.setState({
       todo: currentItem
+    })
+  }
+
+  handleDelete = (id) => {
+    let updated = Object.assign([], this.state.todo);
+
+    let updatedList = updated.filter((task) => 
+      task.id !== id
+    );
+    this.setState({
+      todo: updatedList
+    })
+  }
+
+  handleToggle = () => {
+    this.setState({
+      toggle: !this.state.toggle
     })
   }
 
@@ -38,16 +52,11 @@ class App extends Component {
         <TaskInput 
           handleSubmit={this.handleSubmit} 
         />
-        {
-          this.state.todo.map((element) => {
-            return (
-              <TaskView 
-                key={element.id}
-                task={element.task}
-                />
-            )
-          })
-        }
+        <Task 
+          {...this.state}
+        />
+
+        
       </div>
     );
   }
